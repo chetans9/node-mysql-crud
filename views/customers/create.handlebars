@@ -1,0 +1,29 @@
+<div id= "main">
+
+   <div class="container">
+         <div id="page-title">
+            <h3>Add Customer</h3>
+        </div>
+        <hr>
+     </div>
+    
+    <div class="container">
+        <form action="/customers" method="POST">
+            <div class="form-group">
+                <label for="customer_name">Customer Name:</label>
+                <input type="text" class="form-control" id="customer_name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" name="address"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+
+</div>
