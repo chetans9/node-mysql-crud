@@ -5,7 +5,7 @@ var customersController = require('../app/controllers/customers/customersControl
 /* GET users listing. */
 router.get('/', customersController.index);
 router.get('/create', customersController.create);
-router.post('/create', customersController.store);
+router.post('/', customersController.store);
 router.get('/:id/edit', customersController.edit);
 router.post('/:id/edit', customersController.update);
 router.post('/:id/delete', customersController.destroy);

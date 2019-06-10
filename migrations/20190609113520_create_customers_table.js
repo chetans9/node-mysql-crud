@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
         t.string('last_name',190).nullable();
         t.string('gender',10).nullable();
         t.string('mobile',20).nullable();
-        t.string('eamil',190).nullable();
+        t.string('email',190).nullable();
         t.text('address').nullable();
         t.date('date_of_birth').nullable();
 

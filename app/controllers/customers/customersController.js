@@ -1,4 +1,4 @@
-var customersModel = require('../../models/customersModel');
+let customersModel = require('../../models/customersModel');
 
 var createError = require('http-errors');
 const {check, validationResult} = require('express-validator/check');
@@ -11,13 +11,9 @@ const {check, validationResult} = require('express-validator/check');
  */
 exports.index = async function (req, res) {
 
-   
-    var data = {};
     var query = customersModel.forge();
 
-
     if (req.query.reference_id) {
-
         query = query.where({reference_id: req.query.reference_id});
     }
 
@@ -46,8 +42,12 @@ exports.create = function(req,res){
     res.render('customers/create');
 }
 
-exports.store = function(req,res){
+exports.store = async function(req,res){
 
+    var customer = await new customersModel(req.body).save();
+
+    //req.flash('success','custoemr created successfully');
+    return res.redirect('/customers');
 }
 
 /**
@@ -64,22 +64,22 @@ exports.edit = async function (req, res, next) {
     var reference_id = req.params.reference_id;
 
     try {
-        var CRMTicket = await CRMTicketsModel.forge().where({reference_id: reference_id}).fetch({
+        var customers = await customersModel.forge().where({reference_id: reference_id}).fetch({
             withRelated: ['product', 'bank_branch']
         });
 
-        if(!CRMTicket){
+        if(!customers){
             return next(createError(404));
         }
 
         const formData = req.flash('form')[0];
 
         var data = {
-            CRMTicket: CRMTicket.toJSON(),
-            form: (formData) ? formData : CRMTicket.toJSON() ,
+            customers: customers.toJSON(),
+            form: (formData) ? formData : customers.toJSON() ,
         };
 
-        return res.render('customerCare/show', data);
+        return res.render('customers/show', data);
 
     } catch(err) {
 
