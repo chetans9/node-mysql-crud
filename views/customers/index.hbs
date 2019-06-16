@@ -17,14 +17,12 @@
         <div class="text-right">
             <a href="/customers/create">
 
-                <button class="btn btn-success">Add Customer</button>
+                <button class="btn btn-success">Add Customer <i class="fas fa-user-plus"></i></button>
             </a>
 
         </div>
 
-        <div id="search_section" class="well text-center">
-
-
+        <div id="search_section" class="well">
 
             <form class="form-inline my-2 my-lg-0 justify-content-center">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -33,7 +31,7 @@
         </div>
 
 
-
+  
         <div id="list_section" class="well text-center">
             <table class="table table-striped">
                 <thead>
@@ -41,7 +39,10 @@
                         <th>ID</th>
                         <th>First name</th>
                         <th>Last name</th>
+                         <th>Gender</th>
                         <th>Mobile</th>
+                         <th>Email</th>
+                          <th>Actions</th>
 
 
                     </tr>
@@ -52,7 +53,22 @@
                         <td>{{id}}</td>
                         <td>{{first_name}}</td>
                         <td>{{last_name}}</td>
+                        <td>{{gender}}</td>
                         <td>{{mobile}}</td>
+                        <td>{{email}}</td>
+
+                        <td>
+                            <a href="/customers/{{id}}/edit" class="btn btn-info">
+                              <i class="far fa-edit"></i></a>
+                            </a>
+
+                             <button class="btn btn-danger">
+                                 <i class="far fa-trash-alt"></i>
+                                 
+                            </button>
+                       
+                            
+                        </td>
                     </tr>
                     {{/customers}}
                 </tbody>

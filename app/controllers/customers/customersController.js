@@ -12,6 +12,7 @@ const {check, validationResult} = require('express-validator/check');
 exports.index = async function (req, res) {
 
     var query = customersModel.forge();
+    
 
     if (req.query.reference_id) {
         query = query.where({reference_id: req.query.reference_id});
@@ -30,7 +31,7 @@ exports.index = async function (req, res) {
     if (customersCollection) {
         data.customers = customersCollection.toJSON();
     }
-
+    data.title = 'Customers';
     return res.render('customers/index', data);
 };
 
@@ -40,8 +41,11 @@ exports.create = function(req,res){
     if(req.errors){
         //data.form = req.formData;
     }
-    var data = {};
-    res.render('customers/create',data);
+    var data = {
+        title : 'Add Customer'
+    };
+
+    res.render('customers/add_edit',data);
 }
 
 exports.store = [
@@ -74,12 +78,10 @@ exports.store = [
 
 exports.edit = async function (req, res, next) {
 
-    var reference_id = req.params.reference_id;
+    var id = req.params.id;
 
     try {
-        var customers = await customersModel.forge().where({reference_id: reference_id}).fetch({
-            withRelated: ['product', 'bank_branch']
-        });
+        var customers = await customersModel.forge().where({id: id}).fetch();
 
         if(!customers){
             return next(createError(404));
@@ -92,10 +94,11 @@ exports.edit = async function (req, res, next) {
             form: (formData) ? formData : customers.toJSON() ,
         };
 
-        return res.render('customers/show', data);
+        return res.render('customers/add_edit', data);
 
     } catch(err) {
-
+        console.error(err);
+       throw new err;
     }
 
 

@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>Example App</title>
-   <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-   <link rel="stylesheet" href="/assets/css/style.css">
-   <script src="/assets/jquery/jquery-3.4.1.min.js"></script>
-   <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-  
-    
+     <meta charset="utf-8">
+
+     {{#title}}
+     <title>{{this}} </title>
+     {{/title}}
+     {{^title}}
+     <title>Node MySQL CRUD </title>
+     {{/title}}
+
+
+
+     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+     <link rel="stylesheet" href="/assets/css/style.css">
+     <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
+
+     <script src="/assets/jquery/jquery-3.4.1.min.js"></script>
+     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+
+
 </head>
+
 <body>
      {{> header }}
 
-    <div id="main">
-    {{{body}}}
-    </div>
+     <div id="main">
+          {{{body}}}
+     </div>
 
      {{> footer }}
 
 
 </body>
+
 </html>
