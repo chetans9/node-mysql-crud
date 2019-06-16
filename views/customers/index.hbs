@@ -1,0 +1,69 @@
+{{!< main}}
+<div id="main">
+    <div class="container">
+        <div id="page-title">
+            <h3>Customers</h3>
+        </div>
+        <hr>
+    </div>
+
+
+    <div class="container">
+        {{#if messages.success}}
+        <div class="alert alert-success">{{messages.success}}</div>
+        {{/if}}
+
+
+        <div class="text-right">
+            <a href="/customers/create">
+
+                <button class="btn btn-success">Add Customer</button>
+            </a>
+
+        </div>
+
+        <div id="search_section" class="well text-center">
+
+
+
+            <form class="form-inline my-2 my-lg-0 justify-content-center">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+
+
+
+        <div id="list_section" class="well text-center">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Mobile</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#customers}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{first_name}}</td>
+                        <td>{{last_name}}</td>
+                        <td>{{mobile}}</td>
+                    </tr>
+                    {{/customers}}
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+
+
+
+</div>

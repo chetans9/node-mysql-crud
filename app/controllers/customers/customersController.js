@@ -16,16 +16,14 @@ exports.index = async function (req, res) {
     if (req.query.reference_id) {
         query = query.where({reference_id: req.query.reference_id});
     }
-
-
-    // query = query.query(function (q) {
-    //     q.limit(500);
-    // });
+    query = query.query(function (q) {
+        q.limit(500);
+    });
 
     var customersCollection = await query.fetchAll();
 
     var form_data = req.query;
-    data = {
+    var data = {
         form_data: form_data
     };
 
@@ -33,22 +31,37 @@ exports.index = async function (req, res) {
         data.customers = customersCollection.toJSON();
     }
 
-    res.render('customers/index', data);
+    return res.render('customers/index', data);
 };
 
 
 exports.create = function(req,res){
 
-    res.render('customers/create');
+    if(req.errors){
+        //data.form = req.formData;
+    }
+    var data = {};
+    res.render('customers/create',data);
 }
 
-exports.store = async function(req,res){
+exports.store = [
+    validationRules()
+    ,
+    async function(req,res){
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) 
+    {
+        console.log(errors.mapped());
+        req.flash('errors',errors.mapped());
+        return res.redirect(req.backUrl);
+    }
 
     var customer = await new customersModel(req.body).save();
 
-    //req.flash('success','custoemr created successfully');
+    req.flash('success','custoemr created successfully');
     return res.redirect('/customers');
-}
+}]
 
 /**
  * Show ticket page
@@ -88,6 +101,17 @@ exports.edit = async function (req, res, next) {
 
 };
 
+function validationRules() {
+    return [
+        check('first_name').not().isEmpty().withMessage('First name is required'),
+        check('last_name').not().isEmpty().withMessage('Last name is required'),
+        check('gender').not().isEmpty().withMessage('Gender is required').isIn(['M','F']),
+        check('date_of_birth').not().isEmpty().withMessage('Date of birth is required'),
+        check('address').optional({checkFalsy : true}).isLength({min : 10}).withMessage('Please enter minimum 10 characters'),
+        check('email').optional({checkFalsy : true}).isEmail().withMessage('Please enter valid email')
+    ];
+};
+
 /**
  *
  * @param req
@@ -96,32 +120,11 @@ exports.edit = async function (req, res, next) {
  */
 
 exports.update = [
-
-    check('crm_sr_no').not().isEmpty().withMessage('CRM SR No is Required'),
-    check('status').not().isEmpty().withMessage('Please Select Status')
+    validationRules()
 
     , async function (req, res) {
 
-        var updateData = {
-            status: req.body.status,
-            crm_sr_no: req.body.crm_sr_no,
-            remarks: req.body.remarks
-        };
-
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            req.flash('form',req.body);
-            req.flash('errors',errors.mapped());
-            return res.redirect(req.backUrl);
-        }
-
-        var CRMTicket = await CRMTicketsModel.where({reference_id: req.params.reference_id}).fetch();
-
-        var CRMTicketModel = CRMTicket.save(updateData);
-        req.flash('success', 'CRM ticket Updated successfully');
-
-        return res.redirect(req.getUrl + '/customer-care/search');
+      
 
 
 
