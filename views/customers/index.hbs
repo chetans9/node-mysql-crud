@@ -7,21 +7,18 @@
         <hr>
     </div>
 
-
+    
     <div class="container">
-        {{#if messages.success}}
-        <div class="alert alert-success">{{messages.success}}</div>
-        {{/if}}
-
-
-        <div class="text-right">
+        {{!-- {{getUrl ''}} --}}
+        <div class="text-right add-button">
             <a href="/customers/create">
 
                 <button class="btn btn-success">Add Customer <i class="fas fa-user-plus"></i></button>
             </a>
-
+    
         </div>
 
+        {{> flash_messages}}
         <div id="search_section" class="well">
 
             <form class="form-inline my-2 my-lg-0 justify-content-center">
@@ -31,7 +28,7 @@
         </div>
 
 
-  
+
         <div id="list_section" class="well text-center">
             <table class="table table-striped">
                 <thead>
@@ -39,10 +36,10 @@
                         <th>ID</th>
                         <th>First name</th>
                         <th>Last name</th>
-                         <th>Gender</th>
+                        <th>Gender</th>
                         <th>Mobile</th>
-                         <th>Email</th>
-                          <th>Actions</th>
+                        <th>Email</th>
+                        <th>Actions</th>
 
 
                     </tr>
@@ -59,21 +56,48 @@
 
                         <td>
                             <a href="/customers/{{id}}/edit" class="btn btn-info">
-                              <i class="far fa-edit"></i></a>
+                                <i class="far fa-edit"></i></a>
                             </a>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                data-target="#deleteModal{{id}}"><i class="far fa-trash-alt"></i></button>
 
-                             <button class="btn btn-danger">
-                                 <i class="far fa-trash-alt"></i>
-                                 
-                            </button>
-                       
-                            
+
+
+
                         </td>
+
+
                     </tr>
+                    <div class="modal fade" id="deleteModal{{id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action="customers/{{id}}/delete" method="POST">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete Customer</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete {{first_name}} {{last_name}} ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-warning">Yes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     {{/customers}}
                 </tbody>
             </table>
         </div>
+
+
 
 
 

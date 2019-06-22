@@ -1,8 +1,8 @@
 let customersModel = require('../../models/customersModel');
 
 var createError = require('http-errors');
-const {check, validationResult} = require('express-validator/check');
-const {matchedData, sanitize} = require('express-validator/filter');
+const { check, validationResult } = require('express-validator/check');
+const { matchedData, sanitize } = require('express-validator/filter');
 
 /**
  *
@@ -11,70 +11,76 @@ const {matchedData, sanitize} = require('express-validator/filter');
  * @returns {Promise<void>}
  */
 exports.index = async function (req, res) {
-    
-    var query = customersModel.forge();
-    
+    try {
+        var query = customersModel.forge();
 
-    if (req.query.reference_id) {
-        query = query.where({reference_id: req.query.reference_id});
+        if (req.query.reference_id) {
+            query = query.where({ reference_id: req.query.reference_id });
+        }
+
+        query = query.orderBy('created_at', 'DESC');
+        query = query.query(function (q) {
+            q.limit(500);
+        });
+
+        var customersCollection = await query.fetchAll();
+
+        var form_data = req.query;
+        var data = {
+            form_data: form_data
+        };
+
+        if (customersCollection) {
+            data.customers = customersCollection.toJSON();
+        }
+        data.title = 'Customers';
+        return res.render('customers/index', data);
+
     }
-    query = query.query(function (q) {
-        q.limit(500);
-    });
+    catch (err) {
 
-    var customersCollection = await query.fetchAll();
-
-    var form_data = req.query;
-    var data = {
-        form_data: form_data
-    };
-
-    if (customersCollection) {
-        data.customers = customersCollection.toJSON();
     }
-    data.title = 'Customers';
-    return res.render('customers/index', data);
+
 };
 
 
-exports.create = function(req,res){
+exports.create = function (req, res) {
 
-    
-    var  isEditForm = isEditForm;
+
+    var isEditForm = isEditForm;
     var formData = req.flash('formData')[0];
-  
-    
+
+
     var data = {
-        title : 'Add Customer',
-        isEditForm : isEditForm,
-        form : formData
+        title: 'Add Customer',
+        isEditForm: isEditForm,
+        form: formData
     };
 
-    res.render('customers/add_edit',data);
+    res.render('customers/add_edit', data);
 }
 
 exports.store = [
     validationRules(),
-    async function(req,res){
-    try{
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) 
-        {
-            req.flash('errors',errors.mapped());
-            req.flash('formData',req.body);
-            return res.redirect(req.backUrl);
-        }
-        const requiredData = matchedData(req, { locations: ['body'] });
-        
-        var customer = await new customersModel(requiredData).save();
-    
-        req.flash('success','customer created successfully');
-        return res.redirect('/customers');
+    async function (req, res) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                req.flash('errors', errors.mapped());
+                req.flash('formData', req.body);
+                return res.redirect(req.backUrl);
+            }
+            const requiredData = matchedData(req, { locations: ['body'] });
 
-    }catch(err){
-        console.log(err);
-    }
-}]
+            var customer = await new customersModel(requiredData).save();
+
+            req.flash('success', 'customer created successfully');
+            return res.redirect('/customers');
+
+        } catch (err) {
+            console.log(err);
+        }
+    }]
 
 /**
  * Show ticket page
@@ -90,9 +96,9 @@ exports.edit = async function (req, res, next) {
     var id = req.params.id;
 
     try {
-        var customers = await customersModel.forge().where({id: id}).fetch();
+        var customers = await customersModel.forge().where({ id: id }).fetch();
 
-        if(!customers){
+        if (!customers) {
             return next(createError(404));
         }
 
@@ -101,28 +107,26 @@ exports.edit = async function (req, res, next) {
 
         var data = {
             customers: customers.toJSON(),
-            form: (formData) ? formData : customers.toJSON() ,
-            isEditForm : isEditForm
+            form: (formData) ? formData : customers.toJSON(),
+            isEditForm: isEditForm
         };
 
         return res.render('customers/add_edit', data);
 
-    } catch(err) {
+    } catch (err) {
         console.error(err);
     }
-
-
 };
 
 function validationRules() {
     return [
         check('first_name').not().isEmpty().withMessage('First name is required'),
         check('last_name').not().isEmpty().withMessage('Last name is required'),
-        check('gender').not().isEmpty().withMessage('Gender is required').isIn(['M','F']),
-        check('date_of_birth').toDate().optional({checkFalsy : true}),
-        check('mobile').optional({checkFalsy : true}).isInt(),
-        check('address').optional({checkFalsy : true,nullable : true}).isLength({min : 10}).withMessage('Please enter minimum 10 characters'),
-        check('email').optional({checkFalsy : true,nullable : true}).isEmail().withMessage('Please enter valid email')
+        check('gender').not().isEmpty().withMessage('Gender is required').isIn(['M', 'F']),
+        check('date_of_birth').toDate().optional({ checkFalsy: true }),
+        check('mobile').optional({ checkFalsy: true }).isInt(),
+        check('address').optional({ checkFalsy: true, nullable: true }).isLength({ min: 10 }).withMessage('Please enter minimum 10 characters'),
+        check('email').optional({ checkFalsy: true, nullable: true }).isEmail().withMessage('Please enter valid email')
     ];
 };
 
@@ -139,39 +143,39 @@ exports.update = [
 
         var formData = req.body;
         console.log(formData);
-        try{
+        try {
             const errors = validationResult(req);
-            if (!errors.isEmpty()) 
-            {
-                req.flash('errors',errors.mapped());
-                req.flash('formData',req.body);
+            if (!errors.isEmpty()) {
+                req.flash('errors', errors.mapped());
+                req.flash('formData', req.body);
                 return res.redirect(req.backUrl);
             }
 
             const requiredData = matchedData(req, { locations: ['body'] });
-            await new customersModel({id : req.params.id}).save(requiredData);
-            req.flash('success','customer Updated successfully');
+            await new customersModel({ id: req.params.id }).save(requiredData);
+            req.flash('success', 'customer Updated successfully');
             return res.redirect('/customers');
 
-        }catch (err){
+        } catch (err) {
             console.log(err);
             res.send(err);
 
         }
-        
-
-
-
-
-        
-
-
     }];
 
 
-    exports.destroy = function(req,res){
+exports.destroy = function (req, res) {
 
-    } 
+
+    customersModel.forge().where({ id: req.params.id }).fetch().then(function (CustomerModelBase) {
+        CustomerModelBase.destroy();
+        req.flash('info', 'Customer deleted successfully');
+        return res.redirect('/customers');
+    }).catch(function (err) {
+        console.log(err);
+    });
+
+}
 
 
 
