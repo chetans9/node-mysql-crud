@@ -2,6 +2,7 @@ let customersModel = require('../../models/customersModel');
 
 var createError = require('http-errors');
 const {check, validationResult} = require('express-validator/check');
+const {matchedData, sanitize} = require('express-validator/filter');
 
 /**
  *
@@ -10,7 +11,7 @@ const {check, validationResult} = require('express-validator/check');
  * @returns {Promise<void>}
  */
 exports.index = async function (req, res) {
-
+    
     var query = customersModel.forge();
     
 
@@ -38,33 +39,41 @@ exports.index = async function (req, res) {
 
 exports.create = function(req,res){
 
-    if(req.errors){
-        //data.form = req.formData;
-    }
+    
+    var  isEditForm = isEditForm;
+    var formData = req.flash('formData')[0];
+  
+    
     var data = {
-        title : 'Add Customer'
+        title : 'Add Customer',
+        isEditForm : isEditForm,
+        form : formData
     };
 
     res.render('customers/add_edit',data);
 }
 
 exports.store = [
-    validationRules()
-    ,
+    validationRules(),
     async function(req,res){
+    try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) 
+        {
+            req.flash('errors',errors.mapped());
+            req.flash('formData',req.body);
+            return res.redirect(req.backUrl);
+        }
+        const requiredData = matchedData(req, { locations: ['body'] });
+        
+        var customer = await new customersModel(requiredData).save();
+    
+        req.flash('success','customer created successfully');
+        return res.redirect('/customers');
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) 
-    {
-        console.log(errors.mapped());
-        req.flash('errors',errors.mapped());
-        return res.redirect(req.backUrl);
+    }catch(err){
+        console.log(err);
     }
-
-    var customer = await new customersModel(req.body).save();
-
-    req.flash('success','custoemr created successfully');
-    return res.redirect('/customers');
 }]
 
 /**
@@ -88,17 +97,18 @@ exports.edit = async function (req, res, next) {
         }
 
         const formData = req.flash('form')[0];
+        var isEditForm = true;
 
         var data = {
             customers: customers.toJSON(),
             form: (formData) ? formData : customers.toJSON() ,
+            isEditForm : isEditForm
         };
 
         return res.render('customers/add_edit', data);
 
     } catch(err) {
         console.error(err);
-       throw new err;
     }
 
 
@@ -109,9 +119,10 @@ function validationRules() {
         check('first_name').not().isEmpty().withMessage('First name is required'),
         check('last_name').not().isEmpty().withMessage('Last name is required'),
         check('gender').not().isEmpty().withMessage('Gender is required').isIn(['M','F']),
-        check('date_of_birth').not().isEmpty().withMessage('Date of birth is required'),
-        check('address').optional({checkFalsy : true}).isLength({min : 10}).withMessage('Please enter minimum 10 characters'),
-        check('email').optional({checkFalsy : true}).isEmail().withMessage('Please enter valid email')
+        check('date_of_birth').toDate().optional({checkFalsy : true}),
+        check('mobile').optional({checkFalsy : true}).isInt(),
+        check('address').optional({checkFalsy : true,nullable : true}).isLength({min : 10}).withMessage('Please enter minimum 10 characters'),
+        check('email').optional({checkFalsy : true,nullable : true}).isEmail().withMessage('Please enter valid email')
     ];
 };
 
@@ -124,11 +135,35 @@ function validationRules() {
 
 exports.update = [
     validationRules()
-
     , async function (req, res) {
 
-      
+        var formData = req.body;
+        console.log(formData);
+        try{
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) 
+            {
+                req.flash('errors',errors.mapped());
+                req.flash('formData',req.body);
+                return res.redirect(req.backUrl);
+            }
 
+            const requiredData = matchedData(req, { locations: ['body'] });
+            await new customersModel({id : req.params.id}).save(requiredData);
+            req.flash('success','customer Updated successfully');
+            return res.redirect('/customers');
+
+        }catch (err){
+            console.log(err);
+            res.send(err);
+
+        }
+        
+
+
+
+
+        
 
 
     }];

@@ -14,7 +14,11 @@
     </div>
     <hr>
     <div id="main-content">
-        <form class="form" action="/customers" method="POST">
+        {{#if isEditForm}}
+        <form class="form" action="/customers/{{form.id}}" method="POST">
+        {{else}}
+                <form class="form" action="/customers" method="POST">
+        {{/if}}
             <div class="form-group">
 
                 <label for="first_name">First name:</label>
@@ -61,7 +65,7 @@
             <div class="form-group">
                 <label for="date_of_birth">Date of bitrh :</label>
                 <input type="date" class="form-control {{#if errors.date_of_birth}} is-invalid {{/if}}"
-                    id="date_of_birth" placeholder="Enter mobile" name="date_of_birth">
+                    id="date_of_birth" placeholder="Enter date" name="date_of_birth">
                 {{#if errors.date_of_birth}}
                 <span class="invalid-feedback">
                     <strong>{{ errors.date_of_birth.msg }}</strong>
@@ -71,9 +75,7 @@
 
             <div class="form-group">
                 <label for="address">Address:</label>
-                <textarea class="form-control {{#if errors.address}} is-invalid {{/if}}" id="address" placeholder="Enter password" name="address">
-                    {{form.address}}
-                </textarea>
+                <textarea class="form-control {{#if errors.address}} is-invalid {{/if}}" id="address" placeholder="Enter address" name="address">{{form.address}}</textarea>
                 {{#if errors.address}}
                 <span class="invalid-feedback">
                     <strong>{{ errors.address.msg }}</strong>
