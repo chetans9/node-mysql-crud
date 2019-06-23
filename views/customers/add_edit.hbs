@@ -46,13 +46,13 @@
                 <label>Gender : </label>
                 <div class="form-check-inline">
                     <input type="radio" name="gender" class="form-check-input  {{#if errors.gender}} is-invalid {{/if}}"
-                        id="male" value="M">
+                        id="male" value="M" {{isChecked form.gender 'M'}}>
                     <label class="form-check-label" for="male">Male</label>
                 </div>
                 <div class="form-check-inline">
 
                     <input type="radio" name="gender" id="female"
-                        class="form-check-input {{#if errors.gender}} is-invalid {{/if}}" value="F">
+                        class="form-check-input {{#if errors.gender}} is-invalid {{/if}}" value="F" {{isChecked form.gender 'F'}}>
                     <label class="form-check-label" for="female">Female </label>
 
                 </div>

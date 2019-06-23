@@ -19,25 +19,30 @@ exports.index = async function (req, res) {
         }
 
         query = query.orderBy('created_at', 'DESC');
-        query = query.query(function (q) {
-            q.limit(500);
+        var page = req.query.page;
+
+        var customersCollection = await query.fetchPage({
+            pageSize : 5,
+            page : page
         });
 
-        var customersCollection = await query.fetchAll();
-
-        var form_data = req.query;
+        var searchFormdata = req.query;
         var data = {
-            form_data: form_data
+            searchFormdata: searchFormdata,
+            
         };
 
         if (customersCollection) {
             data.customers = customersCollection.toJSON();
+            data.paginationData = customersCollection.pagination;
+            data.paginationBaseUrl = '/customers';
         }
         data.title = 'Customers';
         return res.render('customers/index', data);
 
     }
     catch (err) {
+        console.error(err);
 
     }
 
@@ -46,10 +51,8 @@ exports.index = async function (req, res) {
 
 exports.create = function (req, res) {
 
-
     var isEditForm = isEditForm;
     var formData = req.flash('formData')[0];
-
 
     var data = {
         title: 'Add Customer',

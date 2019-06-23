@@ -9,7 +9,7 @@
     "bookshelf": "^0.14.2",
     "config": "^3.1.0",
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "debug": "^2.6.9",
     "express": "~4.16.1",
     "express-flash": "0.0.2",
     "express-hbs": "^2.1.2",

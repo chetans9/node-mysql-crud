@@ -5,31 +5,10 @@ var logger = require('morgan');
 var hbs = require('express-hbs');
 var createError = require('http-errors');
 
-
+var debug = require('debug')('http');
+var hbsHelpers = require('./app/helpers/handlebars');
 
 var app = express();
-
-// view engine setup
-app.engine('hbs', hbs.express4({
-	partialsDir: __dirname + '/views/partials',
-	layoutsDir: __dirname + '/views/layouts',
-  }));
-
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
-
-
-var flash = require('express-flash')
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-
-app.use(cookieParser('keyboardcat'));
-app.use(session({
-	secret: 'keyboardcat',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
 
 
 app.use(logger('dev'));
@@ -38,12 +17,36 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var flash = require('express-flash')
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
+app.use(cookieParser('keyboardcat'));
+
+app.use(session({
+	secret: 'keyboardcat',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
 app.use(flash());
 
+// view engine setup
+app.engine('hbs', hbs.express4({
+	partialsDir: __dirname + '/views/partials',
+	layoutsDir: __dirname + '/views/layouts',
+}));
+
+
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(function(req,res,next){
-	res.locals.req = req;
+	hbsHelpers(req,hbs);
     next();
 });
+
+
 
 var indexRouter = require('./routes/index');
 var customersRouter = require('./routes/customersRouter');
