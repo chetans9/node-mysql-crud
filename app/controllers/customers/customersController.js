@@ -10,14 +10,10 @@ const { matchedData, sanitize } = require('express-validator/filter');
  * @param res
  * @returns {Promise<void>}
  */
-exports.index = async function (req, res) {
+exports.index = async function (req, res,next) {
     try {
         var query = customersModel.forge();
-
-        if (req.query.reference_id) {
-            query = query.where({ reference_id: req.query.reference_id });
-        }
-
+        
         query = query.orderBy('created_at', 'DESC');
         var page = req.query.page;
 
@@ -43,6 +39,8 @@ exports.index = async function (req, res) {
     }
     catch (err) {
         console.error(err);
+        next(createError(500,err));
+        
 
     }
 
