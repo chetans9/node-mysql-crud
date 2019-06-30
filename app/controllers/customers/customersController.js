@@ -22,7 +22,7 @@ exports.index = async function (req, res) {
         var page = req.query.page;
 
         var customersCollection = await query.fetchPage({
-            pageSize : 5,
+            pageSize : 10,
             page : page
         });
 
