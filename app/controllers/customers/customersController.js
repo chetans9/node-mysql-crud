@@ -12,9 +12,11 @@ const { matchedData, sanitize } = require('express-validator/filter');
  * @returns {Promise<void>}
  */
 exports.index = async function (req, res,next) {
-    try {
-        var query = customersModel.forge();
 
+    
+    try {
+        var query = new customersModel();
+        
         query = query.orderBy('created_at', 'DESC');
 
         if(req.query.name){

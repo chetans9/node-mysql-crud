@@ -41,6 +41,14 @@ app.engine('hbs', hbs.express4({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+app.use(function(req,res,next){
+	let baseURL = req.protocol + '://' + req.get('host');
+	app.locals.baseURL = baseURL;
+	req.baseURL = baseURL;
+	next();
+});
+
 app.use(function(req,res,next){
 	hbsHelpers(req,hbs);
     next();

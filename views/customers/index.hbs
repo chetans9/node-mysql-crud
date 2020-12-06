@@ -11,8 +11,7 @@
 <div class="container">
     {{!-- {{getUrl ''}} --}}
     <div class="text-right add-button">
-        <a href="/customers/create">
-
+        <a href="{{baseURL}}/customers/create">
             <button class="btn btn-success">Add Customer <i class="fas fa-user-plus"></i></button>
         </a>
 
@@ -24,7 +23,7 @@
         <form class="form-inline my-2 my-lg-0 justify-content-center">
             <input class="form-control mr-sm-2" name="name" type="search" placeholder="Search" aria-label="Search" value="{{searchFormdata.name}}">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            <a href="/customers">
+            <a href="{{baseURL}}/customers">
                    <button class="btn btn-outline-info my-2 my-sm-0" type="button">Clear</button>
             </a>
          
