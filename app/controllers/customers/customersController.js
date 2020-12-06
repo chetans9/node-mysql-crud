@@ -5,7 +5,8 @@ const { check, validationResult } = require('express-validator/check');
 const { matchedData, sanitize } = require('express-validator/filter');
 
 /**
- *
+ * Show list of customers 
+ * 
  * @param req
  * @param res
  * @returns {Promise<void>}
@@ -13,8 +14,12 @@ const { matchedData, sanitize } = require('express-validator/filter');
 exports.index = async function (req, res,next) {
     try {
         var query = customersModel.forge();
-        
+
         query = query.orderBy('created_at', 'DESC');
+
+        if(req.query.name){
+            
+        }
         var page = req.query.page;
 
         var customersCollection = await query.fetchPage({
@@ -38,7 +43,7 @@ exports.index = async function (req, res,next) {
 
     }
     catch (err) {
-        console.error(err);
+        //Pass error to express
         next(createError(500,err));
         
 
@@ -63,7 +68,7 @@ exports.create = function (req, res) {
 
 exports.store = [
     validationRules(),
-    async function (req, res) {
+    async function (req, res,next) {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -79,7 +84,7 @@ exports.store = [
             return res.redirect('/customers');
 
         } catch (err) {
-            console.log(err);
+            next(createError(500,err));
         }
     }]
 
@@ -115,7 +120,7 @@ exports.edit = async function (req, res, next) {
         return res.render('customers/add_edit', data);
 
     } catch (err) {
-        console.error(err);
+        next(createError(500,err));
     }
 };
 
@@ -140,7 +145,7 @@ function validationRules() {
 
 exports.update = [
     validationRules()
-    , async function (req, res) {
+    , async function (req, res,next) {
 
         var formData = req.body;
         console.log(formData);
@@ -158,14 +163,14 @@ exports.update = [
             return res.redirect('/customers');
 
         } catch (err) {
-            console.log(err);
-            res.send(err);
+            next(createError(500,err));
+            
 
         }
     }];
 
 
-exports.destroy = function (req, res) {
+exports.destroy = function (req, res,next) {
 
 
     customersModel.forge().where({ id: req.params.id }).fetch().then(function (CustomerModelBase) {
@@ -173,7 +178,7 @@ exports.destroy = function (req, res) {
         req.flash('info', 'Customer deleted successfully');
         return res.redirect('/customers');
     }).catch(function (err) {
-        console.log(err);
+        next(createError(500,err));
     });
 
 }

@@ -1,5 +1,5 @@
 var url = require('url');
-
+let stringHelper = require('./string');
 var hbsHelpers  = function (req,hbs) {
 
     hbs.registerHelper('ifEquals', function (arg1, arg2, options) {
@@ -18,16 +18,17 @@ var hbsHelpers  = function (req,hbs) {
 
     hbs.registerHelper('paginationLinks', function (data,formData,baseUrl) {
 
-        var html = '';
+        let html = '';
 
         if(data.pageCount > 1 ){
-            var html = '<ul class="pagination">';
+            html = '<ul class="pagination">';
 
             if(formData.page){
                delete formData.page;
             }
 
             var queryString =  Object.keys(formData).map(key => key + '=' + formData[key]).join('&');
+            queryString = stringHelper.escapeHtml(queryString);
             
             if(data.page==1){
              html += '<li class="page-item disabled"><a class="page-link">First</a></li>';
