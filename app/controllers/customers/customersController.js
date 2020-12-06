@@ -18,6 +18,12 @@ exports.index = async function (req, res,next) {
         query = query.orderBy('created_at', 'DESC');
 
         if(req.query.name){
+
+            query = query.query(function (qb) {
+
+                qb.where('first_name','LIKE','%' + req.query.name + '%')
+                    .orWhere('last_name','LIKE', '%' + req.query.name + '%');
+            });
             
         }
         var page = req.query.page;
