@@ -1,25 +1,25 @@
 {
-  "name": "nodemysqlcrud",
+  "name": "new-folder",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "dev": "NODE_ENV=development nodemon ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "bookshelf": "^0.14.2",
-    "config": "^3.1.0",
+    "bookshelf": "^1.2.0",
+    "config": "^3.3.7",
     "cookie-parser": "~1.4.4",
-    "debug": "^2.6.9",
+    "debug": "~2.6.9",
     "express": "~4.16.1",
-    "express-flash": "0.0.2",
-    "express-hbs": "^2.3.4",
-    "express-session": "^1.16.1",
-    "express-validator": "^5.3.1",
+    "express-flash": "^0.0.2",
+    "express-hbs": "^2.4.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.14.1",
     "http-errors": "~1.6.3",
-    "knex": "^0.19.5",
+    "jade": "^0.31.2",
+    "knex": "^2.1.0",
     "lodash": "^4.17.21",
     "morgan": "~1.9.1",
-    "mysql": "^2.17.1"
+    "mysql": "^2.18.1"
   }
 }

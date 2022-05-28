@@ -1,11 +1,14 @@
 // Update with your config settings.
 var config = require('config');
+console.log();
+
 module.exports = {
 
   development: {
     client: 'mysql',
     
     connection : {
+      host : config.database.host,
       database : config.database.database,
       user : config.database.user,
       password : config.database.password
