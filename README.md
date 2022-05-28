@@ -1,8 +1,6 @@
 # NODEJS MySQL CRUD
 
- CRUD actions written in NodeJS/ExpressJS and MySQL.   
-
-
+ CRUD actions written in NodeJS/ExpressJS and MySQL. 
 
 ### Prerequisites
 
@@ -11,9 +9,7 @@
 2. Knex
 3. Bookshelf.js
 
-
-
-### Installing
+### Installation
 
 Clone the project using command
 
@@ -33,6 +29,15 @@ Install Dependencies
 ```
 npm install
 ```
+##### Migrations :
+For migrations to work you need to have knex installed globally. Install using below command
+```
+npm i knex -g
+```
+create a new Mysql database and configure database name in config/development.json file  and run :
+```
+knex migrate:latest
+```
 
 Start the server 
 
@@ -41,7 +46,7 @@ npm start
 ```
 the server will start listening on port 3000 by default
 
-finally open url http://localhost:3000
+open url http://localhost:3000
 
 
 
