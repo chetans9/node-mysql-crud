@@ -60,6 +60,10 @@ open url http://localhost:3000
 * [Knex](https://knexjs.org/) - MySQL 
 * [Bookshelf.js](https://bookshelfjs.org/) - ORM
 
+## Screen shot
+
+![Alt text](public/assets/img/node_mysql_crud.png?raw=true "Node mysql crud screen")
+
 
 
 
