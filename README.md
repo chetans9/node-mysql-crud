@@ -1,6 +1,9 @@
 # NODEJS MySQL CRUD
 
  CRUD actions written in NodeJS/ExpressJS and MySQL. 
+### DEMO 
+Check live demo : 
+http://cs9-node-mysql-crud.herokuapp.com/customers
 
 ### Prerequisites
 
