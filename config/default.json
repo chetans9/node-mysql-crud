@@ -1,9 +1,9 @@
 {
   
   "database": {
-    "host": "mysql_db_container",
-    "user": "root",
-    "password": "rootpassword",
+    "host": "pg_container_db:5432",
+    "user": "user1",
+    "password": "user1password",
     "database": "node_mysql_crud"
   }
 }

@@ -2,7 +2,7 @@ const config = require('config');
 
 var knex = require('knex')({
 
-  client: 'mysql',
+  client: 'pg',
   connection: config.database
 });
 

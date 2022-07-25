@@ -13,24 +13,30 @@ services:
     container_name: node-mysql-crud
     volumes:
       - ./:/app
+    networks : 
+      - external_pg
     # command: tail -F anything
 
 
-  mysql_db_container:
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-    ports:
-      - 3306:3306
-    volumes:
-      - node_mysql_crud_data_container:/var/lib/mysql
-  adminer_container:
-    image: adminer:latest
-    environment:
-      ADMINER_DEFAULT_SERVER: mysql_db_container
-    ports:
-      - 8080:8080
+  # mysql_db_container:
+  #   image: mysql:latest
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - node_mysql_crud_data_container:/var/lib/mysql
+  # adminer_container:
+  #   image: adminer:latest
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: mysql_db_container
+  #   ports:
+  #     - 8080:8080
 volumes:
   node_mysql_crud_data_container:
+
+networks:
+  external_pg : 
+    external: true
 
