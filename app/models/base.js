@@ -3,7 +3,8 @@ const config = require('config');
 var knex = require('knex')({
 
   client: 'pg',
-  connection: config.database
+  connection: config.database,
+  ssl: { rejectUnauthorized: false },
 });
 
 var bookshelf = require('bookshelf')(knex);
