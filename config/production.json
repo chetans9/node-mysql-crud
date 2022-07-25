@@ -1,0 +1,11 @@
+{
+  
+  "database": {
+    "client" : "pg",
+    "host": "ec2-54-159-22-90.compute-1.amazonaws.com",
+    "user": "xsfxewtuheedtl",
+    "port" : "5432",
+    "password": "5712713b49dfae0f9ca7d6cb5c5bfc857c8dfff3b73cb29d1c54fb64dbd7c63e",
+    "database": "dd248b003r28h1"
+  }
+}

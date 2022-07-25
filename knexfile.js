@@ -1,11 +1,11 @@
 // Update with your config settings.
 var config = require('config');
-console.log();
+
 
 module.exports = {
 
   development: {
-    client: 'pg',
+    client: config.database.client,
     
     connection : {
       host : config.database.host,
@@ -32,11 +32,13 @@ module.exports = {
   },
 
   production: {
+    client: config.database.client,
     client: 'pg',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      host : config.database.host,
+      database : config.database.database,
+      user : config.database.user,
+      password : config.database.password
     },
     pool: {
       min: 2,
